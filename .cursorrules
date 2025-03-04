@@ -17,19 +17,37 @@
 1. Use `npx shadcn@latest add [component]` instead of `npx shadcn-ui@latest add [component]` when installing Shadcn UI components.
 2. In Next.js 14+, page props params must be typed as a Promise. Example:
    ```typescript
-   type tParams = Promise<{ id: string }>
+   type tParams = Promise<{ id: string }>;
    interface PageProps {
-     params: tParams
+     params: tParams;
    }
    ```
    Then await the params in the component:
    ```typescript
    export default async function Page(props: PageProps) {
-     const { id } = await props.params
+     const { id } = await props.params;
    }
    ```
 3. Use `const session = await auth()` instead of `const session = await getServerSession(authOptions)` for Next.js authentication. The new `auth()` function is the recommended way to get the session in Next.js Auth v5.
 4. When importing `useRouter` from 'next/navigation', the component must be marked as a client component using the `'use client'` directive at the top of the file, as this hook only works on the client side.
+5. When working with Prisma models that have custom fields not in the TypeScript definitions (like string[] arrays), create a custom type that extends the base model:
+
+   ```typescript
+   import { Map, Location, FrameStyle, Size, Layer } from "@prisma/client";
+
+   type MapWithDetails = Map & {
+     // Include any related models with proper types
+     location: Location | null;
+     frameStyle: FrameStyle | null;
+     size: Size | null;
+     layers: Layer[];
+     // Add custom fields
+     images: string[];
+   };
+
+   // Then cast your data to this type
+   const mapWithImages = map as unknown as MapWithDetails;
+   ```
 
 ## Scratchpad
 
@@ -49,28 +67,33 @@
   - [x] Recharts for analytics: `npm install recharts`
   - [x] Resend for emails: `npm install resend`
   - [x] Uploadthing for file uploads: `npm install uploadthing @uploadthing/react`
-  - [x] Prisma ORM: 
+  - [x] Prisma ORM:
     - [x] Install: `npm install prisma @prisma/client`
     - [x] Initialize: `npx prisma init`
   - [x] NextAuth.js beta: `npm install next-auth@beta`
   - [x] Stripe for payments: `npm install stripe @stripe/stripe-js`
   - [x] Google Maps API: `npm install @react-google-maps/api`
 
-### 2. Database and Authentication [  ]
+### 2. Database and Authentication [ ]
 
-- [ ] Set up PostgreSQL database
-- [ ] Configure Prisma schema:
-  - User model (customers and admins)
-  - Map model with customization options:
-    - Location data (coordinates, zoom level)
-    - Map style (road, satellite, terrain)
-    - Layer options (depth, materials)
-    - Frame options (style, material, color)
-    - Size options
-    - Custom text/inscriptions
-  - Order model (with customization details)
-  - Review model
-  - Cart model
+- [x] Set up PostgreSQL database
+- [x] Configure Prisma schema:
+  - [x] User model (customers and admins)
+  - [x] Map model with customization options:
+    - [x] Location data (coordinates, zoom level)
+    - [x] Map style (road, satellite, terrain)
+    - [x] Frame options (style, material, color)
+    - [x] Size options
+    - [x] Custom text/inscriptions
+  - [x] Order model (with customization details)
+  - [x] Review model
+  - [x] Cart model
+- [x] Seed database with sample data:
+  - [x] Create categories: "Framed Maps" and "Key Holder Maps"
+  - [x] Create sample products for each category
+  - [x] Create sample users (admin and customer)
+  - [x] Create sample reviews
+  - [x] Add product images from public/images folder
 - [ ] Implement NextAuth.js authentication:
   - Email/Password
   - OAuth providers (Google, GitHub)
@@ -103,10 +126,22 @@
   - Implement custom map styling:
     ```javascript
     const customMapStyle = [
-      { featureType: "all", elementType: "all", stylers: [{ visibility: "off" }] },
-      { featureType: "road", elementType: "geometry", stylers: [{ visibility: "on" }, { color: "#000000" }] },
-      { featureType: "water", elementType: "geometry", stylers: [{ visibility: "on" }] },
-    ]
+      {
+        featureType: "all",
+        elementType: "all",
+        stylers: [{ visibility: "off" }],
+      },
+      {
+        featureType: "road",
+        elementType: "geometry",
+        stylers: [{ visibility: "on" }, { color: "#000000" }],
+      },
+      {
+        featureType: "water",
+        elementType: "geometry",
+        stylers: [{ visibility: "on" }],
+      },
+    ];
     ```
   - 3D preview of final product with selected frame and layers
 - [ ] Product Catalog:
