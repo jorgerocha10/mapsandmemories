@@ -1,0 +1,217 @@
+# Cursor Rules
+
+## Instructions
+
+- Record fixes for mistakes or corrections to avoid repetition in the `Lessons` section.
+- Organize thoughts and plan steps before starting a task in the `Scratchpad` section.
+- Clear old tasks if necessary.
+- Use todo markers for progress tracking:
+  - `[x]` Completed tasks
+  - `[ ]` Pending tasks
+- Update Scratchpad after completing subtasks.
+- Reflect and plan after milestones for better task management.
+- Always refer to Scratchpad before planning the next step.
+
+## Lessons
+
+1. Use `npx shadcn@latest add [component]` instead of `npx shadcn-ui@latest add [component]` when installing Shadcn UI components.
+2. In Next.js 14+, page props params must be typed as a Promise. Example:
+   ```typescript
+   type tParams = Promise<{ id: string }>
+   interface PageProps {
+     params: tParams
+   }
+   ```
+   Then await the params in the component:
+   ```typescript
+   export default async function Page(props: PageProps) {
+     const { id } = await props.params
+   }
+   ```
+3. Use `const session = await auth()` instead of `const session = await getServerSession(authOptions)` for Next.js authentication. The new `auth()` function is the recommended way to get the session in Next.js Auth v5.
+4. When importing `useRouter` from 'next/navigation', the component must be marked as a client component using the `'use client'` directive at the top of the file, as this hook only works on the client side.
+
+## Scratchpad
+
+### 1. Project Setup and Configuration [x]
+
+- [x] Initialize Next.js 15 project with TypeScript
+- [x] Set up project structure and folders
+- [x] Configure ESLint and Prettier
+- [x] Install and configure dependencies:
+  - [x] Shadcn UI components:
+    - [x] Install: `npx shadcn@latest init`
+    - [x] Configure theme in `globals.css` and `tailwind.config.js`
+    - [x] Add base components: `npx shadcn@latest add button card dialog dropdown-menu input form sonner`
+  - [x] Lucide icons: `npm install lucide-react`
+  - [x] Zod for validation: `npm install zod`
+  - [x] Zustand for state management: `npm install zustand`
+  - [x] Recharts for analytics: `npm install recharts`
+  - [x] Resend for emails: `npm install resend`
+  - [x] Uploadthing for file uploads: `npm install uploadthing @uploadthing/react`
+  - [x] Prisma ORM: 
+    - [x] Install: `npm install prisma @prisma/client`
+    - [x] Initialize: `npx prisma init`
+  - [x] NextAuth.js beta: `npm install next-auth@beta`
+  - [x] Stripe for payments: `npm install stripe @stripe/stripe-js`
+  - [x] Google Maps API: `npm install @react-google-maps/api`
+
+### 2. Database and Authentication [  ]
+
+- [ ] Set up PostgreSQL database
+- [ ] Configure Prisma schema:
+  - User model (customers and admins)
+  - Map model with customization options:
+    - Location data (coordinates, zoom level)
+    - Map style (road, satellite, terrain)
+    - Layer options (depth, materials)
+    - Frame options (style, material, color)
+    - Size options
+    - Custom text/inscriptions
+  - Order model (with customization details)
+  - Review model
+  - Cart model
+- [ ] Implement NextAuth.js authentication:
+  - Email/Password
+  - OAuth providers (Google, GitHub)
+  - JWT handling
+  - Protected routes
+  - Admin role and permissions
+
+### 3. Core Features - Customer Side [ ]
+
+- [ ] Home Layout:
+  - Create responsive header with logo, navigation, and cart icon
+  - Design hero section showcasing custom laser-cut maps
+  - Create footer with links, social media, and newsletter signup
+- [ ] Homepage:
+  - Featured maps showcase with high-quality images
+  - "How It Works" section explaining the customization process
+  - Testimonials from happy customers
+  - Gallery of completed projects
+  - Call-to-action buttons leading to map builder
+- [ ] Map Builder Tool:
+  - Custom map creator with Google Maps integration:
+    - Location search functionality
+    - Map style selection (street, satellite, minimal)
+    - Interactive preview with zoom and pan controls
+    - Layer depth and material selection
+    - Frame style and material options
+    - Size selection
+    - Custom text/inscription input
+    - Real-time cost calculation
+  - Implement custom map styling:
+    ```javascript
+    const customMapStyle = [
+      { featureType: "all", elementType: "all", stylers: [{ visibility: "off" }] },
+      { featureType: "road", elementType: "geometry", stylers: [{ visibility: "on" }, { color: "#000000" }] },
+      { featureType: "water", elementType: "geometry", stylers: [{ visibility: "on" }] },
+    ]
+    ```
+  - 3D preview of final product with selected frame and layers
+- [ ] Product Catalog:
+  - Premade map designs by category:
+    - City maps
+    - National parks
+    - Wedding venues
+    - Historical locations
+    - Sports venues
+  - Filtering by location, size, style, and price
+  - Sorting options (popularity, price, newest)
+- [ ] Shopping cart:
+  - Add/remove items
+  - Update quantities
+  - Cart persistence
+- [ ] Checkout process:
+  - Shipping information
+  - Payment integration (Stripe)
+  - Order confirmation
+- [ ] User dashboard:
+  - Order history
+  - Profile management
+  - Saved addresses
+  - Saved map designs
+
+### 4. Admin Dashboard [ ]
+
+- [ ] Admin authentication and authorization
+- [ ] Dashboard overview:
+  - [ ] Layout and Structure:
+    - [ ] Create admin dashboard layout with sidebar navigation
+    - [ ] Implement responsive grid for dashboard widgets
+    - [ ] Add loading states and error boundaries
+  - [ ] Key Metrics Cards:
+    - [ ] Total revenue widget with real data
+    - [ ] Total orders widget with real data
+    - [ ] Total customers widget with real data
+    - [ ] Average order value widget with real data
+  - [ ] Sales Analytics:
+    - [ ] Revenue Chart:
+      - [ ] Implement line chart using Recharts
+      - [ ] Add daily/weekly/monthly/yearly filters
+      - [ ] Show revenue trends over time
+      - [ ] Add tooltip with detailed information
+    - [ ] Order Statistics:
+      - [ ] Bar chart for order volume
+      - [ ] Order status distribution
+      - [ ] Peak ordering times
+  - [ ] Recent Orders Table:
+    - [ ] Implement data table with columns:
+      - [ ] Order ID
+      - [ ] Customer name
+      - [ ] Order total
+      - [ ] Status
+      - [ ] Date
+    - [ ] Add sorting and filtering
+    - [ ] Quick actions (view, process, update status)
+  - [ ] Low Stock Alerts:
+    - Materials inventory tracking
+    - Reorder notifications
+    - Stock level indicators
+  - [ ] Production Queue:
+    - Current production status
+    - Estimated completion times
+    - Production capacity visualization
+- [ ] Product management:
+  - CRUD operations for map templates
+  - Material and frame options management
+  - Pricing configuration
+- [ ] Order management:
+  - Order processing workflow
+  - Production status updates
+  - Shipping integration
+  - Refund handling
+
+### 5. Advanced Features [ ]
+
+- [ ] Real-time notifications
+- [ ] Email system (Resend):
+  - Order confirmations
+  - Production status updates
+  - Shipping notifications
+  - Password reset
+- [ ] Search optimization
+- [ ] Performance optimization:
+  - Image optimization
+  - Caching strategies
+  - API optimization
+- [ ] Analytics and reporting
+
+### 6. Testing and Deployment [ ]
+
+- [ ] Unit testing
+- [ ] Integration testing
+- [ ] E2E testing
+- [ ] Security audit
+- [ ] Production deployment:
+  - Environment setup
+  - CI/CD pipeline
+  - Monitoring
+  - Backup strategy
+
+### 7. Documentation [ ]
+
+- [ ] API documentation
+- [ ] User guide
+- [ ] Admin documentation
+- [ ] Deployment guide
