@@ -82,7 +82,7 @@
      id: string;
      name: string;
      description: string | null;
-     price: any; // Decimal in Prisma
+     price: number | string; // Use number | string instead of Prisma.Decimal
      isTemplate: boolean;
      images: string[];
      createdAt: Date;
@@ -91,7 +91,7 @@
    };
    ```
 
-   This approach is more resilient to differences between development and production environments.
+   This approach is more resilient to differences between development and production environments. For Decimal fields in Prisma, use `number | string` instead of `Prisma.Decimal` to ensure compatibility across environments.
 
 ## Scratchpad
 
