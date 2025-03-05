@@ -53,14 +53,20 @@
 
    ```typescript
    // Instead of this (which causes errors):
-   import { PrismaClient, Map } from "@prisma/client";
+   import {
+     PrismaClient,
+     Map,
+     Location,
+     FrameStyle,
+     Size,
+   } from "@prisma/client";
 
    // Do this:
    import { PrismaClient } from "@prisma/client";
-   import type { Map } from "@prisma/client";
+   import type { Map, Location, FrameStyle, Size } from "@prisma/client";
    ```
 
-   This avoids conflicts with the built-in JavaScript `Map` object.
+   This avoids conflicts with built-in JavaScript objects and ensures proper type imports. It's best practice to import all Prisma model types using `import type` to prevent potential conflicts.
 
 ## Scratchpad
 
