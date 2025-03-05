@@ -1,16 +1,54 @@
 import Image from 'next/image';
 import { PrismaClient } from '@prisma/client'
-import type { Location, FrameStyle, Size, Layer, Map } from '@prisma/client'
 
 const prisma = new PrismaClient();
 
 // Define a type that includes the images field
-type MapWithDetails = Map & {
-  location: Location | null;
-  frameStyle: FrameStyle | null;
-  size: Size | null;
-  layers: Layer[];
+type MapWithDetails = {
+  id: string;
+  name: string;
+  description: string | null;
+  price: any; // Decimal in Prisma
+  isTemplate: boolean;
   images: string[];
+  createdAt: Date;
+  updatedAt: Date;
+  location: {
+    id: string;
+    name: string;
+    latitude: number;
+    longitude: number;
+    zoomLevel: number;
+    createdAt: Date;
+    updatedAt: Date;
+    mapId: string;
+  } | null;
+  frameStyle: {
+    id: string;
+    style: string;
+    material: string;
+    color: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    mapId: string;
+  } | null;
+  size: {
+    id: string;
+    width: number;
+    height: number;
+    createdAt: Date;
+    updatedAt: Date;
+    mapId: string;
+  } | null;
+  layers: Array<{
+    id: string;
+    depth: number;
+    material: string;
+    color: string | null;
+    createdAt: Date;
+    updatedAt: Date;
+    mapId: string;
+  }>;
 };
 
 export default async function Home() {

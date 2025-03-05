@@ -53,14 +53,45 @@
 
    ```typescript
    // Instead of this (which causes errors):
-   import { PrismaClient, Map } from "@prisma/client";
+   import {
+     PrismaClient,
+     Map,
+     Location,
+     FrameStyle,
+     Size,
+   } from "@prisma/client";
 
    // Do this:
    import { PrismaClient } from "@prisma/client";
-   import type { Map } from "@prisma/client";
+   import type { Map, Location, FrameStyle, Size } from "@prisma/client";
    ```
 
-   This avoids conflicts with the built-in JavaScript `Map` object.
+   This avoids conflicts with built-in JavaScript objects and ensures proper type imports. It's best practice to import all Prisma model types using `import type` to prevent potential conflicts.
+
+7. For production deployments (especially on platforms like Vercel), avoid importing Prisma types directly and instead define your own interfaces that match the Prisma schema structure:
+
+   ```typescript
+   // Instead of this (which may cause errors in production):
+   import { PrismaClient } from "@prisma/client";
+   import type { Map, Location } from "@prisma/client";
+
+   // Do this:
+   import { PrismaClient } from "@prisma/client";
+
+   type MapType = {
+     id: string;
+     name: string;
+     description: string | null;
+     price: any; // Decimal in Prisma
+     isTemplate: boolean;
+     images: string[];
+     createdAt: Date;
+     updatedAt: Date;
+     // Add other fields as needed
+   };
+   ```
+
+   This approach is more resilient to differences between development and production environments.
 
 ## Scratchpad
 
