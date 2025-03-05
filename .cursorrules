@@ -118,6 +118,33 @@
 
    This is especially important in production builds where TypeScript settings might be stricter.
 
+9. When dealing with complex type casting in TypeScript, especially with Prisma results, use the `unknown` type as an intermediate step for safer type assertions:
+
+   ```typescript
+   // Instead of direct casting which can cause errors:
+   const results = (await prisma.category.findMany({
+     include: { maps: true },
+   })) as CategoryType[]; // This might fail with type errors
+
+   // Do this instead:
+   const resultsData = await prisma.category.findMany({
+     include: { maps: true },
+   });
+   const results = resultsData as unknown as CategoryType[];
+
+   // And for Decimal fields, use unknown in your type definitions:
+   type MapType = {
+     // ...other fields
+     price: unknown; // Instead of number | string
+     // ...other fields
+   };
+
+   // Then convert to string when displaying:
+   <span>${String(map.price)}</span>;
+   ```
+
+   This approach is more resilient to differences between development and production environments.
+
 ## Scratchpad
 
 ### 1. Project Setup and Configuration [x]

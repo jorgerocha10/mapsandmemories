@@ -51,20 +51,35 @@ type MapWithDetails = {
   }>;
 };
 
-// Define the Category type
-type Category = {
+// Define basic map type for the maps returned from Prisma
+type BasicMapType = {
+  id: string;
+  name: string;
+  description: string | null;
+  price: unknown; // Use unknown for Prisma.Decimal
+  isTemplate: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  location: Record<string, unknown> | null;
+  frameStyle: Record<string, unknown> | null;
+  size: Record<string, unknown> | null;
+  layers: Record<string, unknown>[];
+};
+
+// Define category type with specific map type
+type CategoryType = {
   id: string;
   name: string;
   slug: string;
   description: string | null;
   createdAt: Date;
   updatedAt: Date;
-  maps: Array<any>; // We'll cast individual maps later
+  maps: BasicMapType[];
 };
 
 export default async function Home() {
   // Use a more generic type for the initial fetch
-  const categories = await prisma.category.findMany({
+  const categoriesData = await prisma.category.findMany({
     include: {
       maps: {
         include: {
@@ -76,6 +91,9 @@ export default async function Home() {
       },
     },
   });
+  
+  // Safely cast to our type
+  const categories = categoriesData as unknown as CategoryType[];
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -88,7 +106,7 @@ export default async function Home() {
             <p className="mb-6 text-gray-600">{category.description}</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {category.maps.map((map: any) => {
+              {category.maps.map((map: BasicMapType) => {
                 // Cast the map to our custom type that includes images
                 const mapWithImages = map as unknown as MapWithDetails;
                 
@@ -113,7 +131,7 @@ export default async function Home() {
                       <h3 className="text-xl font-semibold mb-2">{map.name}</h3>
                       <p className="text-gray-600 mb-4">{map.description}</p>
                       <div className="flex justify-between items-center">
-                        <span className="text-lg font-bold">${map.price.toString()}</span>
+                        <span className="text-lg font-bold">${String(map.price)}</span>
                         <button className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
                           View Details
                         </button>
