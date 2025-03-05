@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { PrismaClient } from '@prisma/client'
+import { PrismaClient, Prisma } from '@prisma/client'
 
 const prisma = new PrismaClient();
 
@@ -8,7 +8,7 @@ type MapWithDetails = {
   id: string;
   name: string;
   description: string | null;
-  price: any; // Decimal in Prisma
+  price: Prisma.Decimal; // Decimal in Prisma
   isTemplate: boolean;
   images: string[];
   createdAt: Date;
