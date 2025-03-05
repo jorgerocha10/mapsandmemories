@@ -1,5 +1,6 @@
 import Image from 'next/image';
-import { PrismaClient, Map, Location, FrameStyle, Size, Layer } from '@prisma/client';
+import { PrismaClient, Location, FrameStyle, Size, Layer } from '@prisma/client';
+import type { Map } from '@prisma/client';
 
 const prisma = new PrismaClient();
 

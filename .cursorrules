@@ -49,6 +49,19 @@
    const mapWithImages = map as unknown as MapWithDetails;
    ```
 
+6. When importing Prisma types that conflict with built-in JavaScript types (like `Map`), use a type import instead:
+
+   ```typescript
+   // Instead of this (which causes errors):
+   import { PrismaClient, Map } from "@prisma/client";
+
+   // Do this:
+   import { PrismaClient } from "@prisma/client";
+   import type { Map } from "@prisma/client";
+   ```
+
+   This avoids conflicts with the built-in JavaScript `Map` object.
+
 ## Scratchpad
 
 ### 1. Project Setup and Configuration [x]
