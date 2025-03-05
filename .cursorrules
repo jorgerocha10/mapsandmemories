@@ -145,6 +145,38 @@
 
    This approach is more resilient to differences between development and production environments.
 
+10. Use a singleton pattern for PrismaClient in Next.js applications to prevent multiple instances in serverless environments (like Vercel):
+
+    ```typescript
+    // lib/prisma.ts
+    import { PrismaClient } from "@prisma/client";
+
+    const globalForPrisma = global as unknown as { prisma: PrismaClient };
+
+    export const prisma = globalForPrisma.prisma || new PrismaClient();
+
+    if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+    ```
+
+    Then import this singleton in all files instead of creating new instances:
+
+    ```typescript
+    // Instead of this:
+    import { PrismaClient } from "@prisma/client";
+    const prisma = new PrismaClient();
+
+    // Do this:
+    import { prisma } from "@/lib/prisma";
+    ```
+
+    Also, add a postinstall script to package.json to ensure Prisma client is generated during deployment:
+
+    ```json
+    "scripts": {
+      "postinstall": "prisma generate"
+    }
+    ```
+
 ## Scratchpad
 
 ### 1. Project Setup and Configuration [x]
