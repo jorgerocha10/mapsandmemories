@@ -3,7 +3,7 @@ import { PrismaClient } from '@prisma/client'
 
 const prisma = new PrismaClient();
 
-// Define a type that includes the images field
+// Define types for our data
 type MapWithDetails = {
   id: string;
   name: string;
@@ -51,7 +51,19 @@ type MapWithDetails = {
   }>;
 };
 
+// Define the Category type
+type Category = {
+  id: string;
+  name: string;
+  slug: string;
+  description: string | null;
+  createdAt: Date;
+  updatedAt: Date;
+  maps: Array<any>; // We'll cast individual maps later
+};
+
 export default async function Home() {
+  // Use a more generic type for the initial fetch
   const categories = await prisma.category.findMany({
     include: {
       maps: {
@@ -76,7 +88,7 @@ export default async function Home() {
             <p className="mb-6 text-gray-600">{category.description}</p>
             
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-              {category.maps.map((map) => {
+              {category.maps.map((map: any) => {
                 // Cast the map to our custom type that includes images
                 const mapWithImages = map as unknown as MapWithDetails;
                 

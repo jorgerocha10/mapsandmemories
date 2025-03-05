@@ -93,6 +93,31 @@
 
    This approach is more resilient to differences between development and production environments. For Decimal fields in Prisma, use `number | string` instead of `Prisma.Decimal` to ensure compatibility across environments.
 
+8. When using array methods like `map()` with TypeScript, always provide explicit type annotations for parameters to avoid "implicit any" errors:
+
+   ```typescript
+   // This will cause errors in strict TypeScript mode:
+   {
+     items.map((item) => <div key={item.id}>{item.name}</div>);
+   }
+
+   // Do this instead:
+   {
+     items.map((item: ItemType) => <div key={item.id}>{item.name}</div>);
+   }
+
+   // Or if you need to use a more generic approach:
+   {
+     items.map((item: any) => {
+       // Cast to your specific type if needed
+       const typedItem = item as unknown as ItemType;
+       return <div key={typedItem.id}>{typedItem.name}</div>;
+     });
+   }
+   ```
+
+   This is especially important in production builds where TypeScript settings might be stricter.
+
 ## Scratchpad
 
 ### 1. Project Setup and Configuration [x]
